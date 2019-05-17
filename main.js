@@ -28,6 +28,28 @@ function display(stack) {
   }
 }
 
+function is_palindrome(s) {
+  s = s.toLowerCase().replace(/[^a-zA-Z0-9]/g, '');
+  
+  const letters = new Stack();
+
+  let backwards = '';
+
+  for (let i = 0; i < s.length; i++) {
+    letters.push(s[i]);
+  }
+
+  while (!isEmpty(letters)) {
+    backwards += letters.pop();
+  }
+
+  return s === backwards;
+
+  //pushing each char into stack
+  //pop each char off into new string
+  //compare the two strings
+}
+
 
 function main() {
   const starTrek = new Stack();
@@ -50,3 +72,8 @@ function main() {
 }
 
 main();
+
+console.log(is_palindrome('dad'));
+console.log(is_palindrome('A man, a plan, a canal: Panama'));
+console.log(is_palindrome('1001'));
+console.log(is_palindrome('Tauhida'));
