@@ -45,9 +45,31 @@ function is_palindrome(s) {
 
   return s === backwards;
 
-  //pushing each char into stack
-  //pop each char off into new string
-  //compare the two strings
+}
+
+
+function parenthCheck(s) {
+
+  const open = new Stack();
+
+  for (let i = 0; i < s.length; i++) {
+    if (s[i] === '(') {
+      open.push(i);
+    }
+    if (s[i] === ')') {
+      if (isEmpty(open)) {
+        console.log(`close parentheses w/out open at postion: ${i}`);
+        return;
+      }
+      open.pop();
+    }
+  }
+
+  if (!isEmpty(open)) {
+    console.log(`open parentheses w/out close at position: ${open.pop()}`);
+  } else {
+    console.log('string is valid');
+  }
 }
 
 
@@ -77,3 +99,8 @@ console.log(is_palindrome('dad'));
 console.log(is_palindrome('A man, a plan, a canal: Panama'));
 console.log(is_palindrome('1001'));
 console.log(is_palindrome('Tauhida'));
+
+parenthCheck('((())');
+parenthCheck('(()))');
+parenthCheck('((()))');
+parenthCheck(')))(((');
