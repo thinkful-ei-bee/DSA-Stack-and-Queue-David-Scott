@@ -28,6 +28,31 @@ function display(stack) {
   }
 }
 
+function sort(stack) {
+  const tempStack = new Stack();
+  let temp;
+
+  while (!isEmpty(stack)) {
+    temp = stack.pop();
+
+    if (isEmpty(tempStack)) {
+      tempStack.push(temp);
+      continue;
+    }
+
+    while (temp < peek(tempStack)) {
+      stack.push(tempStack.pop());
+    }
+
+    tempStack.push(temp);
+  }
+
+  while(!isEmpty(tempStack)) {
+    stack.push(tempStack.pop());
+  }
+  return stack;
+}
+
 function is_palindrome(s) {
   s = s.toLowerCase().replace(/[^a-zA-Z0-9]/g, '');
   
@@ -138,3 +163,12 @@ console.log(is_palindrome('Tauhida'));
 // parenthCheck(')))(((');
 
 parenthCheck('({({[]"})"');
+
+const numbers = new Stack();
+numbers.push(2);
+numbers.push(6);
+numbers.push(3);
+numbers.push(7);
+numbers.push(1);
+
+display(sort(numbers));
