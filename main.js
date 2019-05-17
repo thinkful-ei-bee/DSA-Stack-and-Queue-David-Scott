@@ -52,25 +52,57 @@ function parenthCheck(s) {
 
   const open = new Stack();
 
+  let isQuote = false;
+  let quoteType = '';
+
+  const openParenth = ['(', '[', '{'];
+  const closeParenth = [')', ']', '}'];
+
   for (let i = 0; i < s.length; i++) {
-    if (s[i] === '(') {
-      open.push(i);
+
+    if (isQuote && s[i] !== '"' && s[i] !== '\'') {
+      continue;
     }
-    if (s[i] === ')') {
-      if (isEmpty(open)) {
-        console.log(`close parentheses w/out open at postion: ${i}`);
-        return;
+    if (isQuote && s[i] === quoteType) {
+      isQuote = false;
+      continue;
+    }
+    if (s[i] === '\'' || s[i] === '"') {
+      isQuote = true;
+      quoteType = s[i];
+      continue;
+    }
+
+    openParenth.forEach((parenth, index) => {
+      if (s[i] === parenth) {
+        open.push([i, closeParenth[index]]);
       }
-      open.pop();
-    }
+    });
+
+    closeParenth.forEach(parenth => {
+      if (s[i] === parenth) {
+        if (isEmpty(open)) {
+          throw new Error(`close parentheses w/out open at postion: ${i}`);
+        }
+        if (peek(open)[1] !== s[i]) {
+          throw new Error(`expected ${peek(open)[1]}, found ${s[i]} at position: ${i}`);
+        }
+        open.pop();
+      }
+    });
   }
 
   if (!isEmpty(open)) {
-    console.log(`open parentheses w/out close at position: ${open.pop()}`);
-  } else {
+    console.log(`open parentheses w/out close at position: ${open.pop()[0]}`);
+  } 
+  else if (isQuote) {
+    console.log(`missing closing ${quoteType}`);
+  }
+  else {
     console.log('string is valid');
   }
 }
+
 
 
 function main() {
@@ -100,7 +132,9 @@ console.log(is_palindrome('A man, a plan, a canal: Panama'));
 console.log(is_palindrome('1001'));
 console.log(is_palindrome('Tauhida'));
 
-parenthCheck('((())');
-parenthCheck('(()))');
-parenthCheck('((()))');
-parenthCheck(')))(((');
+// parenthCheck('((())');
+// parenthCheck('(()))');
+// parenthCheck('((()))');
+// parenthCheck(')))(((');
+
+parenthCheck('({({[]"})"');
